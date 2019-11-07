@@ -22,23 +22,27 @@ div.container
       div.table-responsive
         table.table
           //- TODO: Set the player's information. On select, fill in the player's information in each of the field below. You will need to calculate the average rushing, receiving, and passing yards.
-          tr
-            th Year
-            td ?
-          tr
-            th Major
-            td ?
-          tr
-            th Games Played
-            td ?
-          tr
-            td Passing Yards:
-            td Avg. Passing Yards:
-          tr
-            td Rushing Yards:
-            td Avg. Rushing Yards:
-          tr
-            td Receiving Yards:
-            td Avg. Receiving Yards:
+          - if(info_for_player && total_games)
+              - let avg_passing = info_for_player.passing_yards / total_games
+              - let avg_rushing = info_for_player.rushing_yards / total_games
+              - let avg_receiving = info_for_player.receiving_yards / total_games
+              tr
+                th Year
+                td= info_for_player.year
+              tr
+                th Major
+                td= info_for_player.major
+              tr
+                th Games Played
+                td= total_games
+              tr
+                td Passing Yards: #{info_for_player.passing_yards}
+                td Avg. Passing Yards: #{avg_passing}
+              tr
+                td Rushing Yards: #{info_for_player.rushing_yards}
+                td Avg. Rushing Yards: #{avg_rushing}
+              tr
+                td Receiving Yards: #{info_for_player.receiving_yards}
+                td Avg. Receiving Yards: #{avg_receiving}
 
 include ../partials/footer.pug

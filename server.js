@@ -192,7 +192,7 @@ app.get('/team_stats', function(req, res) {
   });
 });
 
-//player_info
+//player_info get1
   app.get('/player_info', function(req, res) {
   	var query = 'select id,name from football_players;';
   	db.any(query)
@@ -215,6 +215,41 @@ app.get('/team_stats', function(req, res) {
                   color_msg: ''
               })
           })
+  });
+
+
+  //player_info get2
+  app.get('/player_info/select_player', function(req, res) {
+  	var player_choice = req.query.player_choice;
+  	var names =  'SELECT id,name FROM football_players;';
+  	var info_for_player = 'SELECT * FROM football_players WHERE id = '+player_choice+';';
+    var total_games = 'SELECT COUNT(*) FROM football_games WHERE ANY(players) = '+player_choice+';';
+  	db.task('get-everything', task => {
+          return task.batch([
+              task.any(names),
+              task.any(info_for_player),
+              task.any(total_games)
+          ]);
+      })
+      .then(info => {
+      	res.render('pages/player_info/select_player',{
+  				my_title: "Select Player",
+  				names: info[0],
+  				info_for_player: info[1],
+  				total_games: info[2]
+  			})
+      })
+      .catch(error => {
+          // display error message in case an error
+              console.log('error', error);//if this doesn't work for you replace with console.log
+              res.render('pages/player_info/select_player', {
+                  title: 'Select Player',
+                  data: '',
+                  color: '',
+                  color_msg: ''
+              })
+      });
+
   });
 
 /*********************************
